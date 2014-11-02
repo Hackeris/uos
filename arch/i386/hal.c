@@ -10,8 +10,12 @@
 
 int hal_initialize() {
 
+	disable();
+
 	initialize_cpu();
 	i86_pic_initialize(0x20, 0x28);
+
+	enable();
 
 	return 0;
 }

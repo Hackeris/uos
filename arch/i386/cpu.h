@@ -65,6 +65,8 @@
 // so we leave it up to the interrupts' implimentation to handle it and properly return
 typedef void (*i86_irq_handler)(void);
 
+#pragma pack (push, 1)
+
 struct gdt_descriptor {
 	// bits 0-15 of segment limit
 	uint16_t limit;
@@ -106,6 +108,7 @@ struct idtr {
 	unsigned int base;
 };
 
+#pragma pack (pop)
 
 void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 		unsigned char access, unsigned char grand);

@@ -5,13 +5,13 @@
  *      Author: hackeris
  */
 
-#ifdef _I386
 #include <cpu.h>
-#endif
+#include <pic.h>
 
 int hal_initialize() {
 
 	initialize_cpu();
+	i86_pic_initialize(0x20, 0x28);
 
 	return 0;
 }
@@ -23,5 +23,4 @@ int initialize_cpu() {
 
 	return 0;
 }
-
 

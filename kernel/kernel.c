@@ -27,15 +27,17 @@ void kmain(unsigned long magic, unsigned long addr) {
 	//	dump all the multiboot info
 	dump_boot_info(magic, addr);
 
-	initalize_cpu();
+	hal_initialize();
 
 	//	halt
+	int i;
 	for (;;) {
-		;
+		i++;
 	}
 }
 
 void dump_boot_info(unsigned long magic, unsigned long addr) {
+
 	multiboot_info_t *mbi;
 
 	/* Clear the screen. */

@@ -9,9 +9,19 @@
 #include <cpu.h>
 #endif
 
-int initalize_cpu() {
+int hal_initialize() {
 
-	i86_gdt_initialize();
+	initialize_cpu();
 
 	return 0;
 }
+
+int initialize_cpu() {
+
+	i86_gdt_initialize();
+	i86_idt_initialize(0x8);
+
+	return 0;
+}
+
+

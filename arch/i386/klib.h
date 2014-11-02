@@ -8,10 +8,18 @@
 #ifndef KLIB_H_
 #define KLIB_H_
 
-extern void gdt_install(void*);
-extern void enable();
-extern void disable();
-void outportb (unsigned short portid, unsigned char value);
-unsigned char inportb (unsigned short portid);
+void gdt_install(void*);
+
+void idt_install(void*);
+
+void enable();
+
+void disable();
+
+void outportb(unsigned short portid, unsigned char value);
+
+unsigned char inportb(unsigned short portid);
+
+void geninterrupt(unsigned int ir);
 
 #endif /* KLIB_H_ */

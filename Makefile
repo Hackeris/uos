@@ -30,7 +30,7 @@ clean:
 buildimg:
 	sudo mount -o loop a.img /mnt/floppy/
 	sudo cp -fd kernel.bin /mnt/floppy/
-	sleep 0.3s
+	sleep 0.2s
 	sudo umount /mnt/floppy/
 
 kernel.bin:$(OBJS)

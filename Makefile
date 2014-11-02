@@ -13,7 +13,7 @@ LDFLAGS= -g -Ttext $(ENTRYPOINT)
 
 KERNELIMG=kernel.bin
 OBJS=dbg/dbg.o boot/boot.o kernel/kernel.o\
-	arch/i386/screen.o\
+	arch/i386/screen.o arch/i386/hal.o arch/i386/cpu.o arch/i386/klib.o\
 	lib/string.o
 
 everything: $(KERNELIMG)
@@ -54,9 +54,6 @@ arch/i386/cpu.o: arch/i386/cpu.c arch/i386/cpu.h
 	$(CC) $(ARCHFLAGS)	-o $@ $<
 	
 arch/i386/hal.o: arch/i386/hal.c arch/i386/hal.h
-	$(CC) $(ARCHFLAGS)	-o $@ $<
-	
-arch/i386/pic.o: arch/i386/pic.c
 	$(CC) $(ARCHFLAGS)	-o $@ $<
 
 arch/i386/klib.o: arch/i386/klib.asm

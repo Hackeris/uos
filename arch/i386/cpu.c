@@ -12,10 +12,6 @@
 static struct gdt_descriptor _gdt[MAX_DESCRIPTORS];
 // gdtr data
 static struct gdtr _gdtr;
-// interrupt descriptor table
-static struct idt_descriptor _idt[I86_MAX_INTERRUPTS];
-// idtr structure used to help define the cpu's idtr register
-static struct idtr _idtr;
 
 void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 		unsigned char access, unsigned char grand) {

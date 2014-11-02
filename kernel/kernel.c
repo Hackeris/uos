@@ -10,7 +10,6 @@
 
 #ifdef _I386
 #include <../arch/i386/screen.h>
-#include <../arch/i386/hal.h>
 #endif
 
 #define CHECK_FLAG(flags,bit)   ((flags) & (1 << (bit)))
@@ -26,8 +25,6 @@ void kmain(unsigned long magic, unsigned long addr) {
 
 	//	dump all the multiboot info
 	dump_boot_info(magic, addr);
-
-	hal_initialize();
 
 	//	halt
 	int i;

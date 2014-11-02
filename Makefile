@@ -1,4 +1,4 @@
-ENTRYPOINT=0x30400
+ENTRYPOINT=0x100000
 
 ASM=nasm
 CC=gcc
@@ -9,12 +9,11 @@ CFLAGS=-c -I./boot -I./dbg -I./lib -I./include\
 	-D_I386
 ARCHFLAGS= -c -I./arch/i386 -I./include\
 	-fno-builtin --no-stack-protector -g
-LDFALGS=-g -Ttext $(ENTRYPOINT)
+LDFLAGS= -g -Ttext $(ENTRYPOINT)
 
 KERNELIMG=kernel.bin
 OBJS=dbg/dbg.o boot/boot.o kernel/kernel.o\
-	arch/i386/cpu.o  arch/i386/screen.o arch/i386/hal.o arch/i386/pic.o\
-	arch/i386/klib.o\
+	arch/i386/screen.o\
 	lib/string.o
 
 everything: $(KERNELIMG)

@@ -15,7 +15,8 @@ gdt_install:
 	ret
 
 idt_install:
-	lidt	[esp+4]
+	mov		eax,[esp+4]
+	lidt	[eax]
 	ret
 
 enable:

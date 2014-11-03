@@ -60,9 +60,17 @@
 #define I86_IDT_DESC_RING3		0x60	//01100000
 #define I86_IDT_DESC_PRESENT		0x80	//10000000
 
-// interrupt handler w/o error code
-// Note: interrupt handlers are called by the processor. The stack setup may change
-// so we leave it up to the interrupts' implimentation to handle it and properly return
+// i86 defines 256 possible interrupt handlers (0-255)
+#define I86_MAX_INTERRUPTS		256
+
+// must be in the format 0D110, where D is descriptor type
+#define I86_IDT_DESC_BIT16		0x06	//00000110
+#define I86_IDT_DESC_BIT32		0x0E	//00001110
+#define I86_IDT_DESC_RING1		0x40	//01000000
+#define I86_IDT_DESC_RING2		0x20	//00100000
+#define I86_IDT_DESC_RING3		0x60	//01100000
+#define I86_IDT_DESC_PRESENT		0x80	//10000000
+
 typedef void (*i86_irq_handler)(void);
 
 #pragma pack(1)
@@ -117,7 +125,16 @@ void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 
 int i86_gdt_initialize();
 
+// returns interrupt descriptor
+extern struct idt_descriptor* i86_get_ir(uint32_t i);
+
 // installs interrupt handler. When INT is fired, it will call this callback
-int i86_install_ir(uint32_t i, uint16_t flags, uint16_t sel, i86_irq_handler);
+extern int i86_install_ir(uint32_t i, uint16_t flags, uint16_t sel,
+		i86_irq_handler);
+
+// initialize basic idt
+extern int i86_idt_initialize(uint16_t codeSel);
+
+int initialize_cpu();
 
 #endif /* CPU_H_ */

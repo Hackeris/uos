@@ -6,11 +6,12 @@
  */
 
 #include <cpu.h>
+#include <../../dbg/dbg.h>
 
 int hal_initialize() {
 
 	initialize_cpu();
-	
+
 	return 0;
 }
 

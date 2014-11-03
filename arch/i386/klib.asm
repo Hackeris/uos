@@ -10,7 +10,8 @@ global	geninterrupt
 ;global	i86_default_handler
 
 gdt_install:
-	lgdt	[esp+4]
+	mov		eax,[esp+4]
+	lgdt	[eax]
 	ret
 
 idt_install:

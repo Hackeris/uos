@@ -65,7 +65,7 @@
 // so we leave it up to the interrupts' implimentation to handle it and properly return
 typedef void (*i86_irq_handler)(void);
 
-#pragma pack (push, 1)
+#pragma pack(1)
 
 struct gdt_descriptor {
 	// bits 0-15 of segment limit
@@ -85,6 +85,8 @@ struct gdtr {
 	unsigned short m_limit;
 	// base address of gdt
 	unsigned int m_base;
+
+	unsigned short unused;
 };
 
 // interrupt descriptor
@@ -108,20 +110,14 @@ struct idtr {
 	unsigned int base;
 };
 
-#pragma pack (pop)
+#pragma pack(1)
 
 void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 		unsigned char access, unsigned char grand);
 
 int i86_gdt_initialize();
 
-// returns interrupt descriptor
-struct idt_descriptor* i86_get_ir (uint32_t i);
-
 // installs interrupt handler. When INT is fired, it will call this callback
-int i86_install_ir (uint32_t i, uint16_t flags, uint16_t sel, i86_irq_handler);
-
-// initialize basic idt
-int i86_idt_initialize (uint16_t codeSel);
+int i86_install_ir(uint32_t i, uint16_t flags, uint16_t sel, i86_irq_handler);
 
 #endif /* CPU_H_ */

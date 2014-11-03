@@ -47,5 +47,4 @@ geninterrupt:
 	int 0
 	ret
 
-
 ;i86_default_handler:

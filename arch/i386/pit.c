@@ -7,12 +7,14 @@
 
 #include <klib.h>
 #include <pit.h>
+#include <hal.h>
+#include <../../dbg/dbg.h>
 
+void i86_pit_irq();
 
-void i86_pit_irq() {
+void timer_handler() {
 
-	while (1)
-		;
+	kprintf("timer.");
 }
 
 // send command to pit
@@ -71,5 +73,5 @@ void i86_pit_start_counter(uint32_t freq, uint8_t counter, uint8_t mode) {
 void i86_pit_initialize() {
 
 	// Install our interrupt handler (irq 0 uses interrupt 32)
-	setvect(32, i86_pit_irq);
+	setvect(32, i86_pit_irq, 0);
 }

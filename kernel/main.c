@@ -29,6 +29,7 @@ void kmain(unsigned long magic, unsigned long addr) {
 
 	hal_initialize();
 
+	enable();
 	//	halt
 	int i;
 	for (;;) {

@@ -7,6 +7,7 @@
 
 #include <cpu.h>
 #include <klib.h>
+#include <../../dbg/dbg.h>
 
 // Global Descriptor Table (GDT)
 static struct gdt_descriptor _gdt[MAX_DESCRIPTORS];
@@ -96,11 +97,7 @@ int i86_install_ir(uint32_t i, uint16_t flags, uint16_t sel,
 	return 0;
 }
 
-void i86_default_handler() {
-
-	while (1)
-		;
-}
+void i86_default_handler();
 
 // initialize idt
 int i86_idt_initialize(uint16_t codeSel) {

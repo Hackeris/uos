@@ -1,15 +1,15 @@
 ENTRYPOINT=0x100000
 
 ASM=nasm
-CC=gcc
-LD=ld
+CC=i586-elf-gcc
+LD=i586-elf-ld
 ASMKFLAGS= -f elf -g
-CFLAGS=-c -I./boot -I./dbg -I./lib -I./include\
+CFLAGS=-c -elf -I./boot -I./dbg -I./lib -I./include\
 	-fno-builtin --no-stack-protector -g\
 	-D_I386
-ARCHFLAGS= -c -I./arch/i386 -I./include\
+ARCHFLAGS= -c -elf -I./arch/i386 -I./include\
 	-fno-builtin --no-stack-protector -g
-LDFLAGS= -g -Ttext $(ENTRYPOINT)
+LDFLAGS=-g -Ttext $(ENTRYPOINT)
 
 KERNELIMG=kernel.bin
 OBJS=dbg/dbg.o boot/boot.o kernel/kernel.o\
@@ -27,10 +27,7 @@ clean:
 	rm $(KERNELIMG)
 
 buildimg:
-	sudo mount -o loop a.img /mnt/floppy/
-	sudo cp -fd kernel.bin /mnt/floppy/
-	sleep 0.2s
-	sudo umount /mnt/floppy/
+	mcopy -o -i a.img kernel.bin ::
 
 kernel.bin:$(OBJS)
 	$(LD) $(LDFLAGS) -o $(KERNELIMG) $(OBJS)

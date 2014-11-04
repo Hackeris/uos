@@ -8,9 +8,9 @@
 #ifndef CPU_H_
 #define CPU_H_
 
-#include <klib.h>
 #include <types.h>
 
+// maximum amount of descriptors allowed
 #define MAX_DESCRIPTORS					3
 
 /***	 gdt descriptor access bit flags.	***/
@@ -49,16 +49,6 @@
 // 4k grandularity. default: none
 #define I86_GDT_GRAND_4K			0x80			//10000000
 
-// i86 defines 256 possible interrupt handlers (0-255)
-#define I86_MAX_INTERRUPTS		256
-
-// must be in the format 0D110, where D is descriptor type
-#define I86_IDT_DESC_BIT16		0x06	//00000110
-#define I86_IDT_DESC_BIT32		0x0E	//00001110
-#define I86_IDT_DESC_RING1		0x40	//01000000
-#define I86_IDT_DESC_RING2		0x20	//00100000
-#define I86_IDT_DESC_RING3		0x60	//01100000
-#define I86_IDT_DESC_PRESENT		0x80	//10000000
 
 // i86 defines 256 possible interrupt handlers (0-255)
 #define I86_MAX_INTERRUPTS		256
@@ -70,12 +60,13 @@
 #define I86_IDT_DESC_RING2		0x20	//00100000
 #define I86_IDT_DESC_RING3		0x60	//01100000
 #define I86_IDT_DESC_PRESENT		0x80	//10000000
+
 
 typedef void (*i86_irq_handler)(void);
 
 #pragma pack(1)
 
-struct gdt_descriptor {
+typedef struct _gdt_descriptor {
 	// bits 0-15 of segment limit
 	uint16_t limit;
 	// bits 0-23 of base address
@@ -86,19 +77,30 @@ struct gdt_descriptor {
 	uint8_t grand;
 	// bits 24-32 of base address
 	uint8_t baseHi;
-};
+} gdt_descriptor;
 
-struct gdtr {
+typedef struct _gdtr {
 	// size of gdt
 	unsigned short m_limit;
 	// base address of gdt
 	unsigned int m_base;
+} gdtr;
 
-	unsigned short unused;
-};
+typedef struct _ldt_descriptor {
+	// bits 0-15 of segment limit
+	uint16_t limit;
+	// bits 0-23 of base address
+	uint16_t baseLo;
+	uint8_t baseMid;
+	// descriptor access flags
+	uint8_t flags;
+	uint8_t grand;
+	// bits 24-32 of base address
+	uint8_t baseHi;
+} ldt_descriptor;
 
 // interrupt descriptor
-struct idt_descriptor {
+typedef struct _idt_descriptor {
 	// bits 0-16 of interrupt routine (ir) address
 	uint16_t baseLo;
 	// code selector in gdt
@@ -109,16 +111,49 @@ struct idt_descriptor {
 	uint8_t flags;
 	// bits 16-32 of ir address
 	uint16_t baseHi;
-};
+} idt_descriptor;
 
-struct idtr {
+typedef struct _idtr {
 	// size of gdt
 	unsigned short limit;
 	// base address of gdt
 	unsigned int base;
-};
+} idtr;
 
 #pragma pack(1)
+
+//	stack frame	of process
+typedef struct stackframe {
+
+	uint32_t gs;
+	uint32_t fs;
+	uint32_t es;
+	uint32_t ds;
+	uint32_t edi;
+	uint32_t esi;
+	uint32_t ebp;
+	uint32_t kernel_esp;
+	uint32_t ebx;
+	uint32_t edx;
+	uint32_t ecx;
+	uint32_t eax;
+	uint32_t retaddr;
+	uint32_t eip;
+	uint32_t cs;
+	uint32_t eflags;
+	uint32_t esp;
+	uint32_t ss;
+} stack_frame;
+
+//	process
+typedef struct _proc {
+
+	stack_frame regs;
+	uint16_t ldt_sel;
+	ldt_descriptor ldts[2];
+	uint32_t pid;
+	char name[16];
+} proc;
 
 void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 		unsigned char access, unsigned char grand);
@@ -126,7 +161,7 @@ void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 int i86_gdt_initialize();
 
 // returns interrupt descriptor
-extern struct idt_descriptor* i86_get_ir(uint32_t i);
+extern idt_descriptor* i86_get_ir(uint32_t i);
 
 // installs interrupt handler. When INT is fired, it will call this callback
 extern int i86_install_ir(uint32_t i, uint16_t flags, uint16_t sel,

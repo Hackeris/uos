@@ -5,14 +5,13 @@
  *      Author: hackeris
  */
 
-#include <cpu.h>
 #include <klib.h>
-#include <../../dbg/dbg.h>
+#include <cpu.h>
 
 // Global Descriptor Table (GDT)
-static struct gdt_descriptor _gdt[MAX_DESCRIPTORS];
+static gdt_descriptor _gdt[MAX_DESCRIPTORS];
 // gdtr data
-static struct gdtr _gdtr;
+static gdtr _gdtr;
 
 void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 		unsigned char access, unsigned char grand) {
@@ -21,7 +20,7 @@ void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 		return;
 
 	// null out the descriptor
-	memset((void*) &_gdt[i], 0, sizeof(struct gdt_descriptor));
+	memset((void*) &_gdt[i], 0, sizeof(gdt_descriptor));
 
 	// set limit and base addresses
 	_gdt[i].baseLo = base & 0xffff;
@@ -38,7 +37,7 @@ void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 int i86_gdt_initialize() {
 
 	// set up gdtr
-	_gdtr.m_limit = (sizeof(struct gdt_descriptor) * MAX_DESCRIPTORS) - 1;
+	_gdtr.m_limit = (sizeof(gdt_descriptor) * MAX_DESCRIPTORS) - 1;
 	_gdtr.m_base = (uint32_t) &_gdt[0];
 
 	// set null descriptor
@@ -60,13 +59,13 @@ int i86_gdt_initialize() {
 }
 
 // interrupt descriptor table
-static struct idt_descriptor _idt[I86_MAX_INTERRUPTS];
+static idt_descriptor _idt[I86_MAX_INTERRUPTS];
 
 // idtr structure used to help define the cpu's idtr register
-static struct idtr _idtr;
+static idtr _idtr;
 
 // returns interrupt descriptor
-struct idt_descriptor* i86_get_ir(uint32_t i) {
+idt_descriptor* i86_get_ir(uint32_t i) {
 
 	if (i > I86_MAX_INTERRUPTS)
 		return 0;
@@ -103,12 +102,12 @@ void i86_default_handler();
 int i86_idt_initialize(uint16_t codeSel) {
 
 	// set up idtr for processor
-	_idtr.limit = sizeof(struct idt_descriptor) * I86_MAX_INTERRUPTS - 1;
+	_idtr.limit = sizeof(idt_descriptor) * I86_MAX_INTERRUPTS - 1;
 	_idtr.base = (uint32_t) &_idt[0];
 
 	// null out the idt
 	memset((void*) &_idt[0], 0,
-			sizeof(struct idt_descriptor) * I86_MAX_INTERRUPTS - 1);
+			sizeof(idt_descriptor) * I86_MAX_INTERRUPTS - 1);
 
 	// register default handlers
 	int i;

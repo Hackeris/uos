@@ -19,15 +19,15 @@ void setvect(int intno, void (*vect)(), int flags) {
 
 void interruptdone(unsigned int intno) {
 
-	//! insure its a valid hardware irq
+	// insure its a valid hardware irq
 	if (intno > 16)
 		return;
 
-	//! test if we need to send end-of-interrupt to second pic
+	// check if we need to send end-of-interrupt to second pic
 	if (intno >= 8)
 		i86_pic_send_command(I86_PIC_OCW2_MASK_EOI, 1);
 
-	//! always send end-of-interrupt to primary pic
+	// always send end-of-interrupt to primary pic
 	i86_pic_send_command(I86_PIC_OCW2_MASK_EOI, 0);
 }
 

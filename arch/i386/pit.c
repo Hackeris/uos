@@ -10,12 +10,8 @@
 #include <hal.h>
 #include <../../dbg/dbg.h>
 
+//	export from syscall.asm
 void i86_pit_irq();
-
-void timer_handler() {
-
-	kprintf("timer.");
-}
 
 // send command to pit
 void i86_pit_send_command(uint8_t cmd) {

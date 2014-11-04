@@ -20,8 +20,6 @@ void kmain(unsigned long magic, unsigned long addr);
 
 void dump_boot_info(unsigned long magic, unsigned long addr);
 
-/* Check if MAGIC is valid and print the Multiboot information structure
- pointed by ADDR. */
 void kmain(unsigned long magic, unsigned long addr) {
 
 	//	dump all the multiboot info
@@ -29,7 +27,6 @@ void kmain(unsigned long magic, unsigned long addr) {
 
 	hal_initialize();
 
-	enable();
 	//	halt
 	int i;
 	for (;;) {
@@ -37,6 +34,8 @@ void kmain(unsigned long magic, unsigned long addr) {
 	}
 }
 
+/* Check if MAGIC is valid and print the Multiboot information structure
+ pointed by ADDR. */
 void dump_boot_info(unsigned long magic, unsigned long addr) {
 
 	multiboot_info_t *mbi;

@@ -15,10 +15,20 @@ extern timer_handler
 
 i86_pit_irq:
 	pushad
+	push	ds
+	push	es
+	push	fs
+	push	gs
+
 	push 0
 	call interruptdone
 	add	esp,4
 	call timer_handler
+
+	pop		gs
+	pop		fs
+	pop		es
+	pop		ds
 	popad
 	iretd
 

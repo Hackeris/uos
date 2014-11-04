@@ -13,10 +13,10 @@ LDFLAGS=-g -Ttext $(ENTRYPOINT)
 
 KERNELIMG=kernel.bin
 OBJS=dbg/dbg.o boot/boot.o kernel/main.o\
-	arch/i386/screen.o arch/i386/hal.o arch/i386/cpu.o\
+	arch/i386/screen.o arch/i386/hal.o arch/i386/cpu.o arch/i386/syscall.o\
 	arch/i386/klib.o arch/i386/pic.o arch/i386/pit.o\
 	lib/string.o\
-	kernel/kernel.o
+	kernel/clock.o kernel/task.o\
 
 everything: $(KERNELIMG)
 
@@ -28,7 +28,7 @@ clean:
 	rm -rf $(OBJS)
 	rm $(KERNELIMG)
 
-buildimg:
+buildimg:all
 	mcopy -o -i a.img kernel.bin ::
 
 kernel.bin:$(OBJS)
@@ -37,10 +37,13 @@ kernel.bin:$(OBJS)
 boot/boot.o:boot/boot.S
 	$(CC) $(CFLAGS) -o $@ $<
 
-kernel/kernel.o: kernel/kernel.asm
-	$(ASM) $(ASMKFLAGS) $< -o $@
-
 kernel/main.o:kernel/main.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+kernel/clock.o:	kernel/clock.c
+	$(CC) $(CFLAGS) -o $@ $<
+	
+kernel/task.o:	kernel/task.c
 	$(CC) $(CFLAGS) -o $@ $<
 	
 dbg/dbg.o: dbg/dbg.c dbg/dbg.h
@@ -65,6 +68,9 @@ arch/i386/pit.o: arch/i386/pit.c arch/i386/pit.h
 	$(CC) $(ARCHFLAGS)	-o $@ $<
 
 arch/i386/klib.o: arch/i386/klib.asm
+	$(ASM) $(ASMKFLAGS) $< -o $@
+	
+arch/i386/syscall.o: arch/i386/syscall.asm
 	$(ASM) $(ASMKFLAGS) $< -o $@
 
 

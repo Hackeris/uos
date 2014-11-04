@@ -2,6 +2,7 @@
 
 global	gdt_install
 global	idt_install
+global	ldt_install
 global	enable
 global	disable
 global	outportb
@@ -17,6 +18,11 @@ gdt_install:
 idt_install:
 	mov		eax,[esp+4]
 	lidt	[eax]
+	ret
+
+ldt_install:
+	mov		eax,[esp+4]
+	lldt	ax
 	ret
 
 enable:

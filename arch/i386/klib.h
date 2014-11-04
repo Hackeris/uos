@@ -12,6 +12,8 @@ void gdt_install(void*);
 
 void idt_install(void*);
 
+void gdt_install(unsigned int sel);
+
 void enable();
 
 void disable();

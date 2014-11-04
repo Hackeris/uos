@@ -34,6 +34,24 @@ void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 	_gdt[i].grand |= grand & 0xf0;
 }
 
+void ldt_set_descriptor(ldt_descriptor* desc, unsigned int base, unsigned int limit,
+		unsigned char access, unsigned char grand)
+{
+	// null out the descriptor
+	memset((void*) desc, 0, sizeof(ldt_descriptor));
+
+	// set limit and base addresses
+	desc->baseLo = base & 0xffff;
+	desc->baseMid = (base >> 16) & 0xff;
+	desc->baseHi = (base >> 24) & 0xff;
+	desc->limit = limit & 0xffff;
+
+	// set flags and grandularity bytes
+	desc->flags = access;
+	desc->grand = (limit >> 16) & 0x0f;
+	desc->grand |= grand & 0xf0;
+}
+
 int i86_gdt_initialize() {
 
 	// set up gdtr

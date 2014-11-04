@@ -158,6 +158,9 @@ typedef struct _proc {
 void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 		unsigned char access, unsigned char grand);
 
+void ldt_set_descriptor(ldt_descriptor *desc, unsigned int base, unsigned int limit,
+		unsigned char access, unsigned char grand);
+
 int i86_gdt_initialize();
 
 // returns interrupt descriptor

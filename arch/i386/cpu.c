@@ -10,7 +10,7 @@
 #include <string.h>
 
 // Global Descriptor Table (GDT)
-static gdt_descriptor _gdt[MAX_DESCRIPTORS];
+gdt_descriptor _gdt[MAX_DESCRIPTORS];
 // gdtr data
 static gdtr _gdtr;
 

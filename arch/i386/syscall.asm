@@ -12,6 +12,8 @@ global	i86_default_handler
 extern interruptdone
 extern timer_handler
 
+extern p_proc_ready
+
 
 i86_pit_irq:
 	pushad
@@ -35,3 +37,9 @@ i86_pit_irq:
 
 i86_default_handler:
 	iretd
+
+
+restart:
+	mov		esp,[p_proc_ready]
+
+

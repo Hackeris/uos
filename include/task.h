@@ -12,6 +12,11 @@
 
 typedef void (*PTASK_FUN)();
 
+#define STACK_SIZE_TESTA	0x500
+#define STACK_SIZE_TESTB	0x500
+
+#define STACK_SIZE_TOTAL	STACK_SIZE_TESTA+STACK_SIZE_TESTB
+
 typedef struct _task{
 	PTASK_FUN	initial_eip;
 	uint32_t	stack_size;

@@ -11,6 +11,7 @@ global	inportb
 global	geninterrupt
 ;global	i86_default_handler
 
+
 gdt_install:
 	mov		eax,[esp+4]
 	lgdt	[eax]
@@ -60,3 +61,4 @@ geninterrupt:
 	ret
 
 ;i86_default_handler:
+

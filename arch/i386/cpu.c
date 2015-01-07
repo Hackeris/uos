@@ -7,6 +7,7 @@
 
 #include <klib.h>
 #include <cpu.h>
+#include <string.h>
 
 // Global Descriptor Table (GDT)
 static gdt_descriptor _gdt[MAX_DESCRIPTORS];
@@ -34,9 +35,8 @@ void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 	_gdt[i].grand |= grand & 0xf0;
 }
 
-void ldt_set_descriptor(ldt_descriptor* desc, unsigned int base, unsigned int limit,
-		unsigned char access, unsigned char grand)
-{
+void ldt_set_descriptor(ldt_descriptor* desc, unsigned int base,
+		unsigned int limit, unsigned char access, unsigned char grand) {
 	// null out the descriptor
 	memset((void*) desc, 0, sizeof(ldt_descriptor));
 
@@ -68,10 +68,26 @@ int i86_gdt_initialize() {
 			I86_GDT_GRAND_4K | I86_GDT_GRAND_32BIT | I86_GDT_GRAND_LIMITHI_MASK);
 	//! set default data descriptor
 	gdt_set_descriptor(2, 0, 0xffffffff,
-	I86_GDT_DESC_READWRITE | I86_GDT_DESC_CODEDATA | I86_GDT_DESC_MEMORY,
-	I86_GDT_GRAND_4K | I86_GDT_GRAND_32BIT | I86_GDT_GRAND_LIMITHI_MASK);
+			I86_GDT_DESC_READWRITE | I86_GDT_DESC_CODEDATA | I86_GDT_DESC_MEMORY,
+			I86_GDT_GRAND_4K | I86_GDT_GRAND_32BIT | I86_GDT_GRAND_LIMITHI_MASK);
 
 	gdt_install(&_gdtr);
+
+	return 0;
+}
+
+tss _tss;
+
+int i86_tss_initialize() {
+
+	memset(&_tss, 0, sizeof(_tss));
+	_tss.ss0 = SELECTOR_KERNEL_DS;
+	_tss.cs = SELECTOR_KERNEL_CS;
+	gdt_set_descriptor(SELECTOR_TSS >> 3, (uint32_t) &_tss, sizeof(tss) - 1,
+			DA_386TSS & 0xff, (DA_386TSS >> 8) & 0xf0);
+	_tss.iobase = sizeof(tss);
+
+	tss_install(SELECTOR_TSS);
 
 	return 0;
 }

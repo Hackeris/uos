@@ -26,8 +26,7 @@ void i86_pit_send_data(uint16_t data, uint8_t counter) {
 			(counter == I86_PIT_OCW_COUNTER0) ?
 					I86_PIT_REG_COUNTER0 :
 					((counter == I86_PIT_OCW_COUNTER1) ?
-					I86_PIT_REG_COUNTER1 :
-															I86_PIT_REG_COUNTER2);
+							I86_PIT_REG_COUNTER1 : I86_PIT_REG_COUNTER2);
 
 	outportb(port, (uint8_t) data);
 }
@@ -39,8 +38,7 @@ uint8_t i86_pit_read_data(uint16_t counter) {
 			(counter == I86_PIT_OCW_COUNTER0) ?
 					I86_PIT_REG_COUNTER0 :
 					((counter == I86_PIT_OCW_COUNTER1) ?
-					I86_PIT_REG_COUNTER1 :
-															I86_PIT_REG_COUNTER2);
+							I86_PIT_REG_COUNTER1 : I86_PIT_REG_COUNTER2);
 
 	return inportb(port);
 }

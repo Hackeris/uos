@@ -33,17 +33,13 @@ void interruptdone(unsigned int intno) {
 
 int hal_initialize() {
 
-	disable();
-
 	initialize_cpu();
 	i86_pic_initialize(0x20, 0x28);
 
 	i86_pit_initialize();
 
 	i86_pit_start_counter(100, I86_PIT_OCW_COUNTER0,
-	I86_PIT_OCW_MODE_SQUAREWAVEGEN);
-
-	enable();
+			I86_PIT_OCW_MODE_SQUAREWAVEGEN);
 
 	return 0;
 }

@@ -16,40 +16,28 @@
 /***	 gdt descriptor access bit flags.	***/
 // set access bit
 #define I86_GDT_DESC_ACCESS			0x0001			//00000001
-
 // descriptor is readable and writable. default: read only
 #define I86_GDT_DESC_READWRITE			0x0002			//00000010
-
 // set expansion direction bit
 #define I86_GDT_DESC_EXPANSION			0x0004			//00000100
-
 // executable code segment. Default: data segment
 #define I86_GDT_DESC_EXEC_CODE			0x0008			//00001000
-
 // set code or data descriptor. defult: system defined descriptor
 #define I86_GDT_DESC_CODEDATA			0x0010			//00010000
-
 // set dpl bits
 #define I86_GDT_DESC_DPL			0x0060			//01100000
-
 // set "in memory" bit
 #define I86_GDT_DESC_MEMORY			0x0080			//10000000
-
 /**	gdt descriptor grandularity bit flags	***/
 
 // masks out limitHi (High 4 bits of limit)
 #define I86_GDT_GRAND_LIMITHI_MASK		0x0f			//00001111
-
 // set os defined bit
 #define I86_GDT_GRAND_OS			0x10			//00010000
-
 // set if 32bit. default: 16 bit
 #define I86_GDT_GRAND_32BIT			0x40			//01000000
-
 // 4k grandularity. default: none
 #define I86_GDT_GRAND_4K			0x80			//10000000
-
-
 // i86 defines 256 possible interrupt handlers (0-255)
 #define I86_MAX_INTERRUPTS		256
 
@@ -61,6 +49,18 @@
 #define I86_IDT_DESC_RING3		0x60	//01100000
 #define I86_IDT_DESC_PRESENT		0x80	//10000000
 
+#define		DA_386TSS			0x89
+
+/**
+ * global selector
+ */
+#define		SELECTOR_KERNEL_CS		0x08
+#define		SELECTOR_KERNEL_DS		0x10
+
+#define		SELECTOR_TSS			0x18
+
+#define		SELECTOR_LDT_FIRST		0x20
+#define		SELECTOR_LDT_SECOND		0x28
 
 typedef void (*i86_irq_handler)(void);
 
@@ -122,6 +122,36 @@ typedef struct _idtr {
 
 #pragma pack(1)
 
+typedef struct _tss {
+	uint32_t backlink;
+	uint32_t esp0;
+	uint32_t ss0;
+	uint32_t esp1;
+	uint32_t ss1;
+	uint32_t esp2;
+	uint32_t ss2;
+	uint32_t cr3;
+	uint32_t eip;
+	uint32_t flags;
+	uint32_t eax;
+	uint32_t ecx;
+	uint32_t edx;
+	uint32_t ebx;
+	uint32_t esp;
+	uint32_t ebp;
+	uint32_t esi;
+	uint32_t edi;
+	uint32_t es;
+	uint32_t cs;
+	uint32_t ss;
+	uint32_t ds;
+	uint32_t fs;
+	uint32_t gs;
+	uint32_t ldt;
+	uint32_t trap;
+	uint32_t iobase;
+} tss;
+
 //	stack frame	of process
 typedef struct stackframe {
 
@@ -158,10 +188,12 @@ typedef struct _proc {
 void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 		unsigned char access, unsigned char grand);
 
-void ldt_set_descriptor(ldt_descriptor *desc, unsigned int base, unsigned int limit,
-		unsigned char access, unsigned char grand);
+void ldt_set_descriptor(ldt_descriptor *desc, unsigned int base,
+		unsigned int limit, unsigned char access, unsigned char grand);
 
 int i86_gdt_initialize();
+
+int i86_tss_initialize();
 
 // returns interrupt descriptor
 extern idt_descriptor* i86_get_ir(uint32_t i);

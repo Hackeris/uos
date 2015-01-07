@@ -1,6 +1,7 @@
 [section .text]
 
 global	gdt_install
+global	tss_install
 global	idt_install
 global	ldt_install
 global	enable
@@ -18,6 +19,11 @@ gdt_install:
 idt_install:
 	mov		eax,[esp+4]
 	lidt	[eax]
+	ret
+
+tss_install:
+	mov		eax,[esp+4]
+	ltr		ax
 	ret
 
 ldt_install:

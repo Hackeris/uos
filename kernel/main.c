@@ -25,7 +25,9 @@ void kmain(unsigned long magic, unsigned long addr) {
 	//	dump all the multiboot info
 	dump_boot_info(magic, addr);
 
+	disable();
 	hal_initialize();
+	enable();
 
 	//	halt
 	int i;

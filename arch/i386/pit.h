@@ -55,7 +55,7 @@ uint8_t i86_pit_read_data(uint16_t counter);
 // Initialize minidriver
 void i86_pit_initialize();
 
-void timer_handler();
+void clock_handler();
 
 void i86_pit_irq();
 

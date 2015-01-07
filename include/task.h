@@ -17,11 +17,19 @@ typedef void (*PTASK_FUN)();
 
 #define STACK_SIZE_TOTAL	STACK_SIZE_TESTA+STACK_SIZE_TESTB
 
-typedef struct _task{
-	PTASK_FUN	initial_eip;
-	uint32_t	stack_size;
-	char		name[20];
-}task;
+typedef struct _task {
+	PTASK_FUN initial_eip;
+	uint32_t stack_size;
+	char name[20];
+} task;
 
+//	in syscall.asm
+void restart();
+
+int i86_ldt_initialize();
+
+int init_proc();
+
+int init_tasks();
 
 #endif /* TASK_H_ */

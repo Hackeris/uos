@@ -9,7 +9,6 @@ global	disable
 global	outportb
 global	inportb
 global	geninterrupt
-;global	i86_default_handler
 
 
 gdt_install:
@@ -60,5 +59,4 @@ geninterrupt:
 	int 0
 	ret
 
-;i86_default_handler:
 

@@ -8,7 +8,7 @@
 #include <dbg.h>
 #include <types.h>
 
-void timer_handler() {
+void clock_handler() {
 
 	kprintf("tt.");
 }

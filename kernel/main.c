@@ -7,6 +7,7 @@
 
 #include <multiboot.h>
 #include <dbg.h>
+#include <task.h>
 
 #ifdef _I386
 #include <../arch/i386/screen.h>

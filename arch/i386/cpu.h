@@ -48,47 +48,8 @@
 #define I86_IDT_DESC_RING2		0x20	//00100000
 #define I86_IDT_DESC_RING3		0x60	//01100000
 #define I86_IDT_DESC_PRESENT		0x80	//10000000
-#define		DA_386TSS			0x89
-#define		DA_LDT				0x82
-
-#define	PRIVILEGE_KRNL	0
-#define	PRIVILEGE_TASK	1
-#define	PRIVILEGE_USER	3
-
-#define		SA_RPL0				0
-#define		SA_RPL1				1
-#define		SA_RPL2				2
-#define		SA_RPL3				3
-
-#define	RPL_KRNL	SA_RPL0
-#define	RPL_TASK	SA_RPL1
-#define	RPL_USER	SA_RPL3
-
-#define		DA_DR			0x90
-#define		DA_DRW			0x92
-#define		DA_DRWA			0x93
-#define		DA_C			0x98
-#define		DA_CR			0x9a
-#define		DA_CCO			0x9c
-#define		DA_CCOR			0x9e
-
-#define		SA_TI_MASK		0xfffb
-#define		SA_RPL_MASK		0xfffc
-
-#define		SA_TIG				0
-#define		SA_TIL				4
-
-/**
- * global selector
- */
-#define		SELECTOR_KERNEL_CS		0x08
-#define		SELECTOR_KERNEL_DS		0x10
-
-#define		SELECTOR_TSS			0x18
-
-#define		SELECTOR_LDT_FIRST		0x20
-#define		SELECTOR_LDT_SECOND		0x20
-
+//
+//
 typedef void (*i86_irq_handler)(void);
 
 #pragma pack(1)

@@ -76,22 +76,6 @@ int i86_gdt_initialize() {
 	return 0;
 }
 
-tss _tss;
-
-int i86_tss_initialize() {
-
-	memset(&_tss, 0, sizeof(_tss));
-	_tss.ss0 = SELECTOR_KERNEL_DS;
-	_tss.cs = SELECTOR_KERNEL_CS;
-	gdt_set_descriptor(SELECTOR_TSS >> 3, (uint32_t) &_tss, sizeof(tss) - 1,
-			DA_386TSS & 0xff, (DA_386TSS >> 8) & 0xf0);
-	_tss.iobase = sizeof(tss);
-
-	tss_install(SELECTOR_TSS);
-
-	return 0;
-}
-
 // interrupt descriptor table
 static idt_descriptor _idt[I86_MAX_INTERRUPTS];
 

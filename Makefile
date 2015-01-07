@@ -3,7 +3,7 @@ ENTRYPOINT=0x100000
 ASM=nasm
 CC=i586-elf-gcc
 LD=i586-elf-ld
-ASMKFLAGS= -f elf -g
+ASMKFLAGS= -I arch/i386/ -f elf -g
 CFLAGS=-c -elf -I./boot -I./dbg -I./lib -I./include\
 	-fno-builtin --no-stack-protector -g\
 	-D_I386
@@ -18,9 +18,10 @@ OBJS=dbg/dbg.o boot/boot.o kernel/main.o\
 	lib/string.o\
 	kernel/clock.o kernel/task.o\
 
-everything: $(KERNELIMG)
+everything: $(KERNELIMG) all
 
 all:everything
+	mcopy -o -i a.img kernel.bin ::
 
 image:buildimg
 

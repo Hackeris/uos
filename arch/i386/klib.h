@@ -24,4 +24,5 @@ unsigned char inportb(unsigned short portid);
 
 void geninterrupt(unsigned int ir);
 
+
 #endif /* KLIB_H_ */

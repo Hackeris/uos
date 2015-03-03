@@ -1,15 +1,15 @@
 ENTRYPOINT=0x100000
 
 ASM=nasm
-CC=gcc
-LD=ld
-ASMKFLAGS= -I arch/i386/ -f elf32 -g
-CFLAGS=-c -m32 -elf32 -I./boot -I./dbg -I./lib -I./include\
+CC=i586-elf-gcc
+LD=i586-elf-ld
+ASMKFLAGS= -I arch/i386/ -f elf -g
+CFLAGS=-c -I./boot -I./dbg -I./lib -I./include\
 	-fno-builtin --no-stack-protector -g\
 	-D_I386
-ARCHFLAGS= -c -m32 -elf32 -I./arch/i386 -I./include -I./lib\
+ARCHFLAGS= -c -I./arch/i386 -I./include -I./lib\
 	-fno-builtin --no-stack-protector -g
-LDFLAGS= -melf_i386 -g -Ttext $(ENTRYPOINT)
+LDFLAGS= -g -Ttext $(ENTRYPOINT)
 
 KERNELIMG=kernel.bin
 OBJS=dbg/dbg.o boot/boot.o kernel/main.o\

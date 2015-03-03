@@ -1,0 +1,83 @@
+ENTRYPOINT=0x100000
+
+ASM=nasm
+CC=gcc
+LD=ld
+ASMKFLAGS= -I arch/i386/ -f elf32 -g
+CFLAGS=-c -m32 -elf32 -I./boot -I./dbg -I./lib -I./include\
+	-fno-builtin --no-stack-protector -g\
+	-D_I386
+ARCHFLAGS= -c -m32 -elf32 -I./arch/i386 -I./include -I./lib\
+	-fno-builtin --no-stack-protector -g
+LDFLAGS= -melf_i386 -g -Ttext $(ENTRYPOINT)
+
+KERNELIMG=kernel.bin
+OBJS=dbg/dbg.o boot/boot.o kernel/main.o\
+	arch/i386/screen.o arch/i386/hal.o arch/i386/cpu.o arch/i386/syscall.o\
+	arch/i386/klib.o arch/i386/pic.o arch/i386/pit.o\
+	lib/string.o\
+	kernel/clock.o kernel/task.o\
+
+everything: $(KERNELIMG) all
+
+all:everything a.img
+	mcopy -o -i a.img kernel.bin ::
+
+image:buildimg
+
+clean:
+	rm -rf $(OBJS)
+	rm $(KERNELIMG)
+
+buildimg:all a.img
+	mcopy -o -i a.img kernel.bin ::
+
+kernel.bin:$(OBJS)
+	$(LD) $(LDFLAGS) -o $(KERNELIMG) $(OBJS)
+
+boot/boot.o:boot/boot.S
+	$(CC) $(CFLAGS) -o $@ $<
+
+kernel/main.o:kernel/main.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+kernel/clock.o:	kernel/clock.c
+	$(CC) $(CFLAGS) -o $@ $<
+	
+kernel/task.o:	kernel/task.c
+	$(CC) $(CFLAGS) -o $@ $<
+	
+dbg/dbg.o: dbg/dbg.c dbg/dbg.h
+	$(CC) $(CFLAGS)	-o $@ $<
+	
+lib/string.o: lib/string.c
+	$(CC) $(CFLAGS)	-o $@ $<	
+
+arch/i386/screen.o: arch/i386/screen.c arch/i386/screen.h
+	$(CC) $(ARCHFLAGS)	-o $@ $<
+
+arch/i386/cpu.o: arch/i386/cpu.c arch/i386/cpu.h
+	$(CC) $(ARCHFLAGS)	-o $@ $<
+	
+arch/i386/hal.o: arch/i386/hal.c arch/i386/hal.h
+	$(CC) $(ARCHFLAGS)	-o $@ $<
+
+arch/i386/pic.o: arch/i386/pic.c arch/i386/pic.h
+	$(CC) $(ARCHFLAGS)	-o $@ $<
+	
+arch/i386/pit.o: arch/i386/pit.c arch/i386/pit.h
+	$(CC) $(ARCHFLAGS)	-o $@ $<
+
+arch/i386/klib.o: arch/i386/klib.asm
+	$(ASM) $(ASMKFLAGS) $< -o $@
+	
+arch/i386/syscall.o: arch/i386/syscall.asm
+	$(ASM) $(ASMKFLAGS) $< -o $@
+
+
+umount:
+	sudo umount /mnt/floppy
+run:
+	qemu-system-i386 -fda a.img
+debug:
+	qemu-system-i386 -s -S -fda a.img

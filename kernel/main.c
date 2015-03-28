@@ -31,9 +31,8 @@ void kmain(unsigned long magic, unsigned long addr) {
 	enable();
 
 	//	halt
-	int i;
 	for (;;) {
-		i++;
+		__asm("hlt");
 	}
 }
 

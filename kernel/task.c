@@ -1,7 +1,7 @@
 /*
  * task.c
  *
- *  Created on: 2014Äê11ÔÂ4ÈÕ
+ *  Created on: 2014-11-4
  *      Author: hackeris
  */
 
@@ -15,8 +15,6 @@
 #define	NR_TASKS	2
 
 proc proc_table[2];
-
-extern gdt_descriptor _gdt[];
 
 proc* p_proc_ready;
 

@@ -1,13 +1,14 @@
 ;
 ; kernel.asm
 ;
-;  Created on: 2014Äê11ÔÂ4ÈÕ
+;  Created on: 2014ï¿½ï¿½11ï¿½ï¿½4ï¿½ï¿½
 ;      Author: hackeris
 ;
 %include "const.inc"
 
 global	i86_pit_irq
 global	i86_default_handler
+global	restart
 
 extern interruptdone
 extern clock_handler
@@ -39,4 +40,7 @@ i86_pit_irq:
 
 
 i86_default_handler:
+	iretd
+
+restart:
 	iretd

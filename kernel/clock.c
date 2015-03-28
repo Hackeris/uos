@@ -10,5 +10,6 @@
 
 void clock_handler() {
 
-	kprintf("tt.");
+	//	to do: add scheduler here
+	kprintf("timer interrupt. ");
 }

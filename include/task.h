@@ -26,8 +26,6 @@ typedef struct _task {
 //	in syscall.asm
 void restart();
 
-int i86_ldt_initialize();
-
 int init_proc();
 
 int init_tasks();

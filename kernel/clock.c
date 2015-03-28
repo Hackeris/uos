@@ -14,10 +14,6 @@
 #include <../arch/i386/klib.h>
 #endif
 
-extern process* p_proc_ready;
-//extern uint32_t saved_esp;
-extern tss _tss;
-//extern process proc_table[];
 
 void dump_memory(void* ptr, int size) {
 	int i;
@@ -30,6 +26,5 @@ void dump_memory(void* ptr, int size) {
 void clock_handler() {
 
 	//	to do: add scheduler here
-	kprintf("0x%x ", p_proc_ready);
-	dump_memory(&_tss, sizeof(_tss));
+	kprintf("T");
 }

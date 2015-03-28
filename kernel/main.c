@@ -32,13 +32,17 @@ void kmain(unsigned long magic, unsigned long addr) {
 
 	init_tasks();
 
-	restart();
+	//restart();
 
 	enable();
 
 	//	halt
 	for (;;) {
-		__asm("hlt");
+		//__asm("hlt");
+		int i;
+		for (i = 0; i < 10000000; i++)
+			;
+		kprintf("A");
 	}
 }
 

@@ -17,8 +17,6 @@ static gdtr _gdtr;
 
 tss _tss;
 
-uint32_t saved_esp;
-
 //	convert segment to physical address
 uint32_t seg2phys(uint16_t seg) {
 

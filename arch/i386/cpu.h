@@ -141,7 +141,7 @@ typedef struct _tss {
 } tss;
 
 //	stack frame	of process
-typedef struct stackframe {
+typedef struct _stack_frame {
 
 	uint32_t gs;
 	uint32_t fs;
@@ -164,14 +164,14 @@ typedef struct stackframe {
 } stack_frame;
 
 //	process
-typedef struct _proc {
+typedef struct _process {
 
 	stack_frame regs;
 	uint16_t ldt_sel;
 	ldt_descriptor ldts[2];
 	uint32_t pid;
 	char name[16];
-} proc;
+} process;
 
 void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 		unsigned char access, unsigned char grand);

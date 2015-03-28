@@ -12,6 +12,10 @@
 
 typedef void (*PTASK_FUN)();
 
+#define SELECTOR_TSS		0x18
+#define SELECTOR_FIRST_LDT	0x20
+
+
 #define STACK_SIZE_TESTA	0x500
 #define STACK_SIZE_TESTB	0x500
 

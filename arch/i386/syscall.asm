@@ -1,7 +1,7 @@
 ;
 ; kernel.asm
 ;
-;  Created on: 2014��11��4��
+;  Created on: 2014-11-4
 ;      Author: hackeris
 ;
 %include "const.inc"

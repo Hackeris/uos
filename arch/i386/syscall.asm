@@ -14,6 +14,7 @@ extern interruptdone
 extern clock_handler
 
 extern p_proc_ready
+extern _tss
 
 [SECTION .text]
 i86_pit_irq:
@@ -43,4 +44,18 @@ i86_default_handler:
 	iretd
 
 restart:
+	mov esp,[p_proc_ready]
+	mov ax,word[esp + P_LDT_SEL]
+	lldt ax
+	lea	eax,[esp + P_STACKTOP]
+	mov dword[_tss + TSS3_S_SP0], eax
+
+	pop	gs
+	pop	fs
+	pop	es
+	pop	ds
+	popad
+
+	add esp,4
+
 	iretd

@@ -1,7 +1,7 @@
 /*
  * clock.c
  *
- *  Created on: 2014Äê11ÔÂ4ÈÕ
+ *  Created on: 2014-11-4
  *      Author: hackeris
  */
 
@@ -11,5 +11,5 @@
 void clock_handler() {
 
 	//	to do: add scheduler here
-	kprintf("timer interrupt. ");
+	kprintf("T");
 }

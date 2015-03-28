@@ -27,7 +27,13 @@ void kmain(unsigned long magic, unsigned long addr) {
 	dump_boot_info(magic, addr);
 
 	disable();
+
 	hal_initialize();
+
+	init_tasks();
+
+	restart();
+
 	enable();
 
 	//	halt

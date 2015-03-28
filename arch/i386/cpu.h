@@ -11,7 +11,7 @@
 #include <types.h>
 
 // maximum amount of descriptors allowed
-#define MAX_DESCRIPTORS					3
+#define MAX_DESCRIPTORS					5
 
 /***	 gdt descriptor access bit flags.	***/
 // set access bit
@@ -41,6 +41,9 @@
 // i86 defines 256 possible interrupt handlers (0-255)
 #define I86_MAX_INTERRUPTS		256
 
+//	i86 defines the target descriptor is in LDT
+#define SELECTOR_LDT_MASK		0x04
+
 // must be in the format 0D110, where D is descriptor type
 #define I86_IDT_DESC_BIT16		0x06	//00000110
 #define I86_IDT_DESC_BIT32		0x0E	//00001110
@@ -50,6 +53,10 @@
 #define I86_IDT_DESC_PRESENT		0x80	//10000000
 //
 //
+
+//	convert segment base and virtual address to physical address
+#define vir2phys(seg_base,vir)  (uint32_t)(((uint32_t)seg_base) + (uint32_t)(vir))
+
 typedef void (*i86_irq_handler)(void);
 
 #pragma pack(1)
@@ -172,6 +179,8 @@ typedef struct _process {
 	uint32_t pid;
 	char name[16];
 } process;
+
+uint32_t seg2phys(uint16_t seg);
 
 void gdt_set_descriptor(unsigned int i, unsigned int base, unsigned int limit,
 		unsigned char access, unsigned char grand);

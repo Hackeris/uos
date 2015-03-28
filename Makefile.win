@@ -7,7 +7,7 @@ ASMKFLAGS= -I arch/i386/ -f elf -g
 CFLAGS=-c -I./boot -I./dbg -I./lib -I./include\
 	-fno-builtin --no-stack-protector -g\
 	-D_I386
-ARCHFLAGS= -c -I./arch/i386 -I./include -I./lib\
+ARCHFLAGS= -c -I./arch/i386 -I./include -I./lib -I./dbg\
 	-fno-builtin --no-stack-protector -g
 LDFLAGS= -g -Ttext $(ENTRYPOINT)
 

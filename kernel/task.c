@@ -14,22 +14,16 @@
 #include <task.h>
 #include <string.h>
 
-#define	NR_TASKS	2
-
 process proc_table[NR_TASKS];
 
 process* p_proc_ready;
+//process* proc_ready;
 
 void TestA();
 void TestB();
 
 extern gdt_descriptor _gdt[];
 extern tss _tss;
-
-/*
- task task_table[NR_TASKS] = { { TestA, STACK_SIZE_TESTA, "TestA" }, { TestB,
- STACK_SIZE_TESTB, "TestB" } };
- */
 
 void milli_delay(unsigned int t) {
 	int i;
@@ -44,10 +38,7 @@ void TestA() {
 	char i = 0;
 	while (1) {
 
-		if (i >= 127)
-			i = 0;
-		kprintf("%d", i);
-		i++;
+		kprintf("A");
 		milli_delay(50);
 	}
 }
@@ -80,6 +71,10 @@ int init_tasks() {
 			2 * sizeof(ldt_descriptor) - 1,
 			I86_GDT_DESC_READWRITE | I86_GDT_DESC_MEMORY,
 			I86_GDT_GRAND_LIMITHI_MASK);
+	gdt_set_descriptor((SELECTOR_FIRST_LDT + 8) >> 3,
+			(uint32_t) &proc_table[1].ldts, 2 * sizeof(ldt_descriptor) - 1,
+			I86_GDT_DESC_READWRITE | I86_GDT_DESC_MEMORY,
+			I86_GDT_GRAND_LIMITHI_MASK);
 
 	init_proc();
 
@@ -92,6 +87,9 @@ int init_proc() {
 
 	process * p_proc = proc_table;
 	p_proc_ready = p_proc;
+	//proc_ready = p_proc_ready;
+
+	kprintf("p_proc_ready: 0x%x\n", p_proc_ready);
 
 	p_proc->ldt_sel = SELECTOR_FIRST_LDT;
 	memcpy(&p_proc->ldts, &_gdt[1], sizeof(gdt_descriptor));
@@ -109,6 +107,27 @@ int init_proc() {
 	p_proc->regs.gs = 8 | SELECTOR_LDT_MASK;
 	p_proc->regs.eip = (uint32_t) TestA;
 	p_proc->regs.esp = (uint32_t) task_stack + STACK_SIZE_TOTAL;
+	p_proc->regs.eflags = 0x1202; //	IF=1, IOPL=1, bit 2 is always 1
+
+	p_proc++;
+
+	p_proc->ldt_sel = SELECTOR_FIRST_LDT + 8;
+	memcpy(&p_proc->ldts, &_gdt[1], sizeof(gdt_descriptor));
+	ldt_set_descriptor(&p_proc->ldts[0], 0, 0xffffffff,
+			I86_GDT_DESC_READWRITE | I86_GDT_DESC_EXEC_CODE
+					| I86_GDT_DESC_CODEDATA | I86_GDT_DESC_MEMORY,
+			I86_GDT_GRAND_4K | I86_GDT_GRAND_32BIT | I86_GDT_GRAND_LIMITHI_MASK);
+	ldt_set_descriptor(&p_proc->ldts[1], 0, 0xffffffff,
+			I86_GDT_DESC_READWRITE | I86_GDT_DESC_CODEDATA | I86_GDT_DESC_MEMORY,
+			I86_GDT_GRAND_4K | I86_GDT_GRAND_32BIT | I86_GDT_GRAND_LIMITHI_MASK);
+	p_proc->regs.cs = 0 | SELECTOR_LDT_MASK;
+	p_proc->regs.ds = 8 | SELECTOR_LDT_MASK;
+	p_proc->regs.es = 8 | SELECTOR_LDT_MASK;
+	p_proc->regs.fs = 8 | SELECTOR_LDT_MASK;
+	p_proc->regs.gs = 8 | SELECTOR_LDT_MASK;
+	p_proc->regs.eip = (uint32_t) TestB;
+	p_proc->regs.esp = (uint32_t) task_stack + STACK_SIZE_TOTAL
+			+ STACK_SIZE_TESTA;
 	p_proc->regs.eflags = 0x1202; //	IF=1, IOPL=1, bit 2 is always 1
 
 	return 0;

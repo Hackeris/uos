@@ -11,7 +11,7 @@
 #include <types.h>
 
 // maximum amount of descriptors allowed
-#define MAX_DESCRIPTORS					5
+#define MAX_DESCRIPTORS					6
 
 /***	 gdt descriptor access bit flags.	***/
 // set access bit

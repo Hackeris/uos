@@ -38,8 +38,6 @@ int hal_initialize() {
 	i86_pic_initialize(0x20, 0x28);
 	i86_pit_initialize();
 
-
-
 	return 0;
 }
 

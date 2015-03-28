@@ -12,6 +12,10 @@
 
 typedef void (*PTASK_FUN)();
 
+#define	NR_TASKS	2
+
+#define KERNAL_STACK_SIZE	1024*32
+
 #define SELECTOR_TSS		0x18
 #define SELECTOR_FIRST_LDT	0x20
 #define SELECTOR_KERNEL_DS	0x10

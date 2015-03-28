@@ -8,6 +8,7 @@
 #include <klib.h>
 #include <cpu.h>
 #include <string.h>
+#include <exception.h>
 
 // Global Descriptor Table (GDT)
 gdt_descriptor _gdt[MAX_DESCRIPTORS];
@@ -15,6 +16,8 @@ gdt_descriptor _gdt[MAX_DESCRIPTORS];
 static gdtr _gdtr;
 
 tss _tss;
+
+uint32_t saved_esp;
 
 //	convert segment to physical address
 uint32_t seg2phys(uint16_t seg) {
@@ -154,6 +157,7 @@ int initialize_cpu() {
 
 	i86_gdt_initialize();
 	i86_idt_initialize(0x8);
+	install_def_irq();
 
 	return 0;
 }

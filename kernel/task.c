@@ -37,9 +37,8 @@ void milli_delay(unsigned int t) {
 void TestA() {
 	char i = 0;
 	while (1) {
-
-		kprintf("A");
-		milli_delay(50);
+		__asm("movl $0xcccccccc,%eax");
+		__asm("movl $0xcdcd,%ebx");
 	}
 }
 
@@ -79,6 +78,8 @@ int init_tasks() {
 	init_proc();
 
 	tss_install(SELECTOR_TSS);
+
+	_tss.esp0 = &p_proc_ready->regs;
 
 	return 0;
 }

@@ -21,7 +21,7 @@ extern saved_esp
 
 [SECTION .text]
 i86_pit_irq:
-	sub		esp,4
+	;sub		esp,4
 
 	pushad
 	push	ds
@@ -51,7 +51,7 @@ i86_pit_irq:
 	pop		ds
 	popad
 
-	add		esp,4
+	;add		esp,4
 
 	iretd
 
@@ -64,8 +64,8 @@ restart:
 	mov esp,[p_proc_ready]
 	mov ax,word[esp + P_LDT_SEL]
 	lldt ax
-	lea	eax,[esp + P_STACKTOP]
-	mov dword[_tss + TSS3_S_SP0], eax
+	;lea	eax,[esp + P_STACKTOP]
+	;mov dword[_tss + TSS3_S_SP0], eax
 
 	pop	gs
 	pop	fs
@@ -73,7 +73,7 @@ restart:
 	pop	ds
 	popad
 
-	add esp,4
+	;add esp,4
 
 	iretd
 

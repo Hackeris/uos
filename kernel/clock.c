@@ -15,10 +15,13 @@
 #endif
 
 extern process* p_proc_ready;
+extern uint32_t saved_esp;
+extern tss _tss;
 //extern process proc_table[];
 
 void clock_handler() {
 
 	//	to do: add scheduler here
-	kprintf("0x%x ", p_proc_ready);
+	//kprintf("0x%x 0x%x ", p_proc_ready, saved_esp);
+	kprintf("0x%x 0x%x ", _tss.eax, _tss.ebx);
 }

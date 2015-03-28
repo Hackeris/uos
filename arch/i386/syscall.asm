@@ -33,7 +33,6 @@ i86_pit_irq:
 	mov ds,dx
 	mov es,dx
 
-	mov [saved_esp],esp
 	lea esp,[kernel_stack]
 
 	push 0
@@ -41,8 +40,10 @@ i86_pit_irq:
 	add	esp,4
 	call clock_handler
 
-	mov esp,[saved_esp]
-	lea eax,[esp + P_STACKTOP]
+	mov esp,[p_proc_ready]
+	mov ax,word[esp + P_LDT_SEL]
+	lldt ax
+	lea	eax,[esp + P_STACKTOP]
 	mov dword[_tss + TSS3_S_SP0], eax
 
 	pop		gs
@@ -64,8 +65,8 @@ restart:
 	mov esp,[p_proc_ready]
 	mov ax,word[esp + P_LDT_SEL]
 	lldt ax
-	;lea	eax,[esp + P_STACKTOP]
-	;mov dword[_tss + TSS3_S_SP0], eax
+	lea	eax,[esp + P_STACKTOP]
+	mov dword[_tss + TSS3_S_SP0], eax
 
 	pop	gs
 	pop	fs

@@ -24,6 +24,10 @@
 #define I86_GDT_DESC_EXEC_CODE			0x0008			//00001000
 // set code or data descriptor. defult: system defined descriptor
 #define I86_GDT_DESC_CODEDATA			0x0010			//00010000
+#define I86_GDT_DESC_DPL0			0x0000			//01100000
+#define I86_GDT_DESC_DPL1			0x0020			//01100000
+#define I86_GDT_DESC_DPL2			0x0040			//01100000
+#define I86_GDT_DESC_DPL3			0x0060			//01100000
 // set dpl bits
 #define I86_GDT_DESC_DPL			0x0060			//01100000
 // set "in memory" bit
